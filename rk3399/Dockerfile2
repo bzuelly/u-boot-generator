@@ -1,0 +1,25 @@
+FROM rockylinux:9 AS base
+ARG SOURCE_DATE_EPOCH
+COPY sigaltarch.repo /etc/yum.repos.d
+RUN rpm --import https://dl.rockylinux.org/pub/sig/9/altarch/aarch64/altarch-common/RPM-GPG-KEY-Rocky-SIG-AltArch
+RUN dnf install epel-release -y && /usr/bin/crb enable && rm /etc/yum.repos.d/epel-*.repo
+RUN dnf install -y \
+    bc \
+    bison \
+    dtc \
+    flex \
+    gcc \
+    gnutls-devel \
+    libuuid-devel \
+    make \
+    ncurses-devel \
+    openssl-devel \
+    perl-interpreter \
+    python3-devel \
+    python3-setuptools \
+    python3-libfdt \
+    SDL2-devel \
+    swig \
+    arm-trusted-firmware-armv8 \
+    python3-pyelftools
+

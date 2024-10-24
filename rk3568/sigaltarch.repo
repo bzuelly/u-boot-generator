@@ -1,0 +1,5 @@
+[sigaltarch]
+name=SigAltArch
+baseurl=https://dl.rockylinux.org/pub/sig/9/altarch/aarch64/altarch-common
+enabled=1
+gpgcheck=1
