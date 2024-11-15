@@ -1,4 +1,5 @@
-SPI_IMAGE=./spi_image.img
+BOARD=$1
+SPI_IMAGE=./${BOARD}_spi_image.img
 
 generate_spi_image() {
 	dd if=/dev/zero of=$SPI_IMAGE bs=1M count=0 seek=16

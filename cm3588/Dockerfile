@@ -63,8 +63,8 @@ RUN --mount=type=cache,target=/u-boot/build \
 WORKDIR /u-boot
 RUN --mount=type=cache,target=/u-boot/build \
     mkdir -p out && \
-    cp -r build/u-boot-rockchip-spi.bin out/${NAME}.bin
-
+    #cp -r build/u-boot-rockchip-spi.bin out/${NAME}.bin && \
+    cp -r build/u-boot-rockchip.bin out/
 
 FROM scratch AS u-boot
 ARG SOURCE_DATE_EPOCH

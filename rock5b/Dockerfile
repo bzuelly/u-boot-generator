@@ -21,7 +21,8 @@ RUN dnf install -y \
     SDL2-devel \
     swig \
     arm-trusted-firmware-armv8 \
-    python3-pyelftools
+    python3-pyelftools \
+    git
 
 FROM base as u-boot-downloader
 ARG SOURCE_DATE_EPOCH
@@ -32,13 +33,14 @@ RUN mkdir -p /u-boot/src && \
 
 FROM base as rkbin-downloader
 ARG SOURCE_DATE_EPOCH
-ARG RKBIN_SOURCE=https://github.com/rockchip-linux/rkbin/archive/refs/heads/master.tar.gz
+ARG RKBIN_SOURCE=https://github.com/radxa/rkbin/archive/refs/tags/develop-v20240301.tar.gz
 
-RUN mkdir -p /src && \
+RUN mkdir -p /src && cd /src && \
     mkdir -p /rkbin && \
-    curl -L ${RKBIN_SOURCE} | tar -xz -C /src --strip-components=1 && \
-    cp /src/bin/rk35/$(ls -1 /src/bin/rk35 | grep -E 'rk3588_ddr_lp4_2112MHz_lp5_2400MHz_v[0-9.]+.bin' | tail -n 1) /rkbin/tpl.bin && \
-    cp /src/bin/rk35/$(ls -1 /src/bin/rk35 | grep -E 'rk3588_bl31_v[0-9.]+.elf' | tail -n 1) /rkbin/bl31.bin
+    git clone --depth 1 --branch develop-v2024.10 https://github.com/radxa/rkbin.git && \
+    #curl -L ${RKBIN_SOURCE} | tar -xz -C /src --strip-components=1 && \
+    cp rkbin/bin/rk35/'rk3588_ddr_lp4_2112MHz_lp5_2400MHz_uart2_m0_115200_v1.16'.bin /rkbin/tpl.bin && \
+    cp rkbin/bin/rk35/'rk3588_bl31_v1.47'.elf /rkbin/bl31.bin
 
 FROM base as u-boot-builder
 ARG SOURCE_DATE_EPOCH
@@ -65,9 +67,7 @@ RUN --mount=type=cache,target=/u-boot/build \
     mkdir -p out && \
     mv build/u-boot.itb out/u-boot.itb && \
     mv build/idbloader.img out/idbloader.img && \
-    mv build/u-boot-rockchip-spi.bin out/u-boot-rockchip-spi.bin 
-    #cp  build/idbloader.img out/idbloader.img \
-    #cp  build/u-boot.itb out/u-boot.itb
+    mv build/u-boot-rockchip-spi.bin out/u-boot-${BOARD}-spi.bin 
 
 
 FROM scratch AS u-boot
