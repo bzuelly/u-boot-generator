@@ -26,7 +26,7 @@ RUN dnf install -y \
 
 FROM base as u-boot-downloader
 ARG SOURCE_DATE_EPOCH
-ARG U_BOOT_VERSION=v2024.10
+ARG U_BOOT_VERSION=v2025.01
 ARG U_BOOT_SOURCE=https://source.denx.de/u-boot/u-boot/-/archive/${U_BOOT_VERSION}/u-boot-${U_BOOT_VERSION}.tar.gz
 RUN mkdir -p /u-boot/src && \
     curl -L ${U_BOOT_SOURCE} | tar -xz -C /u-boot/src --strip-components=1
@@ -39,7 +39,7 @@ RUN mkdir -p /src && cd /src && \
     mkdir -p /rkbin && \
     git clone --depth 1 --branch develop-v2024.10 https://github.com/radxa/rkbin.git && \
     #curl -L ${RKBIN_SOURCE} | tar -xz -C /src --strip-components=1 && \
-    cp rkbin/bin/rk35/'rk3588_ddr_lp4_2112MHz_lp5_2400MHz_uart2_m0_115200_v1.16'.bin /rkbin/tpl.bin && \
+    cp rkbin/bin/rk35/'rk3588_ddr_lp4_2112MHz_lp5_2400MHz_v1.18'.bin /rkbin/tpl.bin && \
     cp rkbin/bin/rk35/'rk3588_bl31_v1.47'.elf /rkbin/bl31.bin
 
 FROM base as u-boot-builder
@@ -48,7 +48,7 @@ ARG SOURCE_DATE_EPOCH
 COPY --from=u-boot-downloader /u-boot/src /u-boot/src
 COPY --from=rkbin-downloader /rkbin /rkbin
 
-ARG U_BOOT_VERSION=v2024.10
+ARG U_BOOT_VERSION=v2025.01
 ARG BOARD=rock5b
 ARG NAME=u-boot-${U_BOOT_VERSION}-${BOARD}-spi
 ARG DEFCONFIG=rock5b-rk3588
@@ -73,7 +73,7 @@ RUN --mount=type=cache,target=/u-boot/build \
 FROM scratch AS u-boot
 ARG SOURCE_DATE_EPOCH
 
-ARG U_BOOT_VERSION=v2024.10
+ARG U_BOOT_VERSION=v2025.01
 ARG BOARD=rock5b
 COPY --from=u-boot-builder /u-boot/out/* /
 
