@@ -2,3 +2,5 @@
 
 
 ```podman build --platform="linux/arm64" --output type=local,dest=. . --build-arg DEFCONFIG=rock5b-rk3588```
+
+```podman build --platform="linux/arm64" --output type=local,dest=. . --build-arg DEFCONFIG=orangepi-5-plus-rk3588```
