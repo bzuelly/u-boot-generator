@@ -25,7 +25,7 @@ RUN dnf install -y \
 
 FROM base as u-boot-downloader
 ARG SOURCE_DATE_EPOCH
-ARG U_BOOT_VERSION=v2024.10
+ARG U_BOOT_VERSION=v2025.01
 ARG U_BOOT_SOURCE=https://source.denx.de/u-boot/u-boot/-/archive/${U_BOOT_VERSION}/u-boot-${U_BOOT_VERSION}.tar.gz
 RUN mkdir -p /u-boot/src && \
     curl -L ${U_BOOT_SOURCE} | tar -xz -C /u-boot/src --strip-components=1
@@ -46,7 +46,7 @@ ARG SOURCE_DATE_EPOCH
 COPY --from=u-boot-downloader /u-boot/src /u-boot/src
 COPY --from=rkbin-downloader /rkbin /rkbin
 
-ARG U_BOOT_VERSION=v2024.10
+ARG U_BOOT_VERSION=v2025.01
 ARG BOARD=lubancat2n
 ARG NAME=u-boot-${U_BOOT_VERSION}-${BOARD}-spi
 ARG DEFCONFIG=evb-rk3568
@@ -69,7 +69,7 @@ RUN --mount=type=cache,target=/u-boot/build \
 FROM scratch AS u-boot
 ARG SOURCE_DATE_EPOCH
 
-ARG U_BOOT_VERSION=v2024.10
+ARG U_BOOT_VERSION=v2025.01
 ARG BOARD=lubancat2n
 COPY --from=u-boot-builder /u-boot/out/* /
 
